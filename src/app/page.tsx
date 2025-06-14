@@ -2,11 +2,19 @@
 
 import TravelForm from '@/components/TravelForm';
 import { TravelFormData } from '@/types/travel';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
+  const router = useRouter();
+
   const handleSubmit = (data: TravelFormData) => {
     console.log('Form submitted:', data);
-    // TODO: API呼び出しの実装
+    // フォームデータをクエリパラメータとして結果ページに渡す
+    const queryParams = new URLSearchParams();
+    Object.entries(data).forEach(([key, value]) => {
+      queryParams.append(key, value.toString());
+    });
+    router.push(`/result?${queryParams.toString()}`);
   };
 
   return (
