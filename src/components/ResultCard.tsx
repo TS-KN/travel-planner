@@ -1,9 +1,10 @@
 import { TravelPlan } from '@/types/travel';
-import { mockTravelPlan } from '@/mocks/travelPlan';
 
-export default function ResultCard() {
-  const plan = mockTravelPlan; // 後でAPIから取得するように変更
+interface ResultCardProps {
+  plan: TravelPlan;
+}
 
+export default function ResultCard({ plan }: ResultCardProps) {
   return (
     <div className="space-y-8">
       {/* 概要 */}
