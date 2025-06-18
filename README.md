@@ -16,6 +16,17 @@ AIを活用した旅行計画アシスタント。目的地、日程、予算な
 - TypeScript
 - Tailwind CSS
 - OpenAI API (GPT-4)
+- Supabase
+
+## 環境変数
+
+`.env.local`ファイルに以下の環境変数を設定してください：
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+OPENAI_API_KEY=your_openai_api_key
+```
 
 ## 始め方
 
@@ -30,29 +41,23 @@ cd travel-planner
 npm install
 ```
 
-3. 環境変数の設定
-`.env.local`ファイルを作成し、以下の内容を追加：
-```
-OPENAI_API_KEY=your-api-key-here
-```
-
-4. 開発サーバーの起動
+3. 開発サーバーの起動
 ```bash
 npm run dev
 ```
 
-5. ブラウザで http://localhost:3000 にアクセス
+4. ブラウザで http://localhost:3000 にアクセス
 
 ## 使い方
+0. ログインする
 
-1. トップページで以下の情報を入力：
+1. 以下の情報を入力：
    - 目的地
    - 出発日
    - 帰着日
    - 人数
    - 交通手段
    - 予算
-   - 希望・好み（任意）
 
 2. 「プランを作成」ボタンをクリック
 
