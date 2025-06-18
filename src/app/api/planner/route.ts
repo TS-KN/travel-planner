@@ -1,6 +1,13 @@
 import { NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
+import { cookies } from 'next/headers';
 import OpenAI from 'openai';
 import { TravelPlan } from '@/types/travel';
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
 // OpenAIクライアントの初期化
 const openai = new OpenAI({
@@ -9,6 +16,16 @@ const openai = new OpenAI({
 
 export async function POST(request: Request) {
   try {
+    const cookieStore = cookies();
+    const { data: { session } } = await supabase.auth.getSession();
+
+    if (!session) {
+      return NextResponse.json(
+        { error: '認証が必要です' },
+        { status: 401 }
+      );
+    }
+
     const body = await request.json();
     const {
       destination,

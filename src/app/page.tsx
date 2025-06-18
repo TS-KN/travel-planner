@@ -1,27 +1,94 @@
 'use client';
 
-import TravelForm from '@/components/TravelForm';
-import { TravelFormData } from '@/types/travel';
+import { useState } from 'react';
+import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
+import FormInput from '@/components/FormInput';
+import { useAuth } from '@/hooks/useAuth';
 
-export default function Home() {
+export default function LoginPage() {
   const router = useRouter();
+  const { isLoading: isAuthLoading } = useAuth(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (data: TravelFormData) => {
-    console.log('Form submitted:', data);
-    // フォームデータをクエリパラメータとして結果ページに渡す
-    const queryParams = new URLSearchParams();
-    Object.entries(data).forEach(([key, value]) => {
-      queryParams.append(key, value.toString());
-    });
-    router.push(`/result?${queryParams.toString()}`);
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        toast.error('ログインに失敗しました');
+        return;
+      }
+
+      toast.success('ログインしました');
+      router.push('/planner');
+    } catch (error) {
+      toast.error('予期せぬエラーが発生しました');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
+  if (isAuthLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-xl">読み込み中...</div>
+      </div>
+    );
+  }
+
   return (
-    <main className="min-h-screen p-8">
-      <div className="max-w-2xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8 text-center">旅行プランナー</h1>
-        <TravelForm onSubmit={handleSubmit} />
+    <main className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8">
+        <div>
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+            旅行プランナーにログイン
+          </h2>
+        </div>
+        <form className="mt-8 space-y-6" onSubmit={handleLogin}>
+          <div className="space-y-4">
+            <FormInput
+              id="email"
+              name="email"
+              type="email"
+              label="メールアドレス"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              placeholder="メールアドレス"
+            />
+            <FormInput
+              id="password"
+              name="password"
+              type="password"
+              label="パスワード"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              placeholder="パスワード"
+            />
+          </div>
+
+          <div>
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+            >
+              {isLoading ? 'ログイン中...' : 'ログイン'}
+            </button>
+          </div>
+        </form>
       </div>
     </main>
   );

@@ -1,13 +1,16 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useAuth } from '@/hooks/useAuth';
 import ResultCard from '@/components/ResultCard';
 import BackButton from '@/components/BackButton';
 import { TravelPlan } from '@/types/travel';
 
 export default function Result() {
+  const router = useRouter();
   const searchParams = useSearchParams();
+  const { isLoading: isAuthLoading } = useAuth();
   const [plan, setPlan] = useState<TravelPlan | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -34,6 +37,10 @@ export default function Result() {
         });
 
         if (!response.ok) {
+          if (response.status === 401) {
+            router.push('/');
+            return;
+          }
           throw new Error('旅行プランの生成に失敗しました');
         }
 
@@ -49,26 +56,46 @@ export default function Result() {
     fetchPlan();
   }, [searchParams]);
 
+  if (isAuthLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-xl">読み込み中...</div>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-xl">プランを生成中...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-xl text-red-600">{error}</div>
+      </div>
+    );
+  }
+
+  if (!plan) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-xl">プランが見つかりません</div>
+      </div>
+    );
+  }
+
   return (
     <main className="min-h-screen p-8">
       <div className="max-w-2xl mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <BackButton />
+          <BackButton href="/planner" />
           <h1 className="text-3xl font-bold">旅行プラン結果</h1>
           <div className="w-24"></div> {/* スペーサー */}
         </div>
-        {loading && (
-          <div className="text-center py-8">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
-            <p className="mt-4 text-gray-600">旅行プランを生成中...</p>
-          </div>
-        )}
-        {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded relative" role="alert">
-            <strong className="font-bold">エラー: </strong>
-            <span className="block sm:inline">{error}</span>
-          </div>
-        )}
         {plan && <ResultCard plan={plan} />}
       </div>
     </main>
