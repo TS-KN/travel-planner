@@ -1,12 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 import FormInput from '@/components/FormInput';
 import { useAuth } from '@/hooks/useAuth';
+import { createClient } from '@/utils/supabase/client';
+
+const supabase = createClient();
 
 export default function LoginPage() {
   const router = useRouter();
@@ -18,26 +20,15 @@ export default function LoginPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-
-    try {
-      const result = await signIn('credentials', {
-        email,
-        password,
-        redirect: false,
-      });
-
-      if (result?.error) {
-        toast.error('ログインに失敗しました');
-        return;
-      }
-
-      toast.success('ログインしました');
-      router.push('/planner');
-    } catch {
-      toast.error('予期せぬエラーが発生しました');
-    } finally {
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) {
+      toast.error('ログインに失敗しました');
       setIsLoading(false);
+      return;
     }
+    toast.success('ログインしました');
+    router.push('/planner');
+    setIsLoading(false);
   };
 
   if (isAuthLoading) {

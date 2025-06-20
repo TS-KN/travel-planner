@@ -16,7 +16,8 @@ export default function TravelForm({ onSubmit }: TravelFormProps) {
     endDate: '',
     numberOfPeople: 1,
     transportation: 'plane',
-    budget: 0,
+    budget: 10000,
+    preferences: '',
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -103,6 +104,17 @@ export default function TravelForm({ onSubmit }: TravelFormProps) {
         onChange={handleChange}
         required
         min={0}
+      />
+
+      <FormInput
+        label="希望・好み"
+        id="preferences"
+        name="preferences"
+        type="text"
+        value={formData.preferences}
+        onChange={handleChange}
+        placeholder="例：観光重視、グルメ、ゆっくりしたい など（任意）"
+        required={false}
       />
 
       <button

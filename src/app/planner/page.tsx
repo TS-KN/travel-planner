@@ -7,10 +7,9 @@ import { TravelFormData } from '@/types/travel';
 
 export default function PlannerPage() {
   const router = useRouter();
-  const { session, isLoading } = useAuth();
+  const { isLoading } = useAuth();
 
   const handleSubmit = (data: TravelFormData) => {
-    console.log('Form submitted:', data);
     // フォームデータをクエリパラメータとして結果ページに渡す
     const queryParams = new URLSearchParams();
     Object.entries(data).forEach(([key, value]) => {

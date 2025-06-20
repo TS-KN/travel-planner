@@ -1,23 +1,38 @@
-import { useEffect } from 'react';
+'use client';
+
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+import { createClient } from '@/utils/supabase/client';
+import type { User } from '@supabase/supabase-js';
+
+const supabase = createClient();
 
 export function useAuth(requireAuth: boolean = true) {
   const router = useRouter();
-  const { data: session, status } = useSession();
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (requireAuth && status === 'unauthenticated') {
-      router.push('/');
-    } else if (!requireAuth && status === 'authenticated') {
-      router.push('/planner');
-    }
-  }, [status, router, requireAuth]);
+    const getUser = async () => {
+      const { data } = await supabase.auth.getUser();
+      setUser(data.user);
+      setIsLoading(false);
+      if (requireAuth && !data.user) router.push('/');
+      if (!requireAuth && data.user) router.push('/planner');
+    };
+    getUser();
+
+    const { data: listener } = supabase.auth.onAuthStateChange(() => {
+      getUser();
+    });
+    return () => {
+      listener?.subscription.unsubscribe();
+    };
+  }, [requireAuth, router]);
 
   return {
-    session,
-    status,
-    isLoading: status === 'loading',
-    isAuthenticated: status === 'authenticated',
+    user,
+    isLoading,
+    isAuthenticated: !!user,
   };
 } 
