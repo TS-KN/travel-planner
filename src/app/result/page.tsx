@@ -86,16 +86,18 @@ function ResultContent() {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl text-red-600">{error}</div>
+      <div className="min-h-screen flex flex-col items-center justify-center">
+        <div className="text-xl text-red-600 mb-4">{error}</div>
+        <BackButton href="/planner" />
       </div>
     );
   }
 
   if (!plan) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl">プランが見つかりません</div>
+      <div className="min-h-screen flex flex-col items-center justify-center">
+        <div className="text-xl mb-4">プランが見つかりません</div>
+        <BackButton href="/planner" />
       </div>
     );
   }
