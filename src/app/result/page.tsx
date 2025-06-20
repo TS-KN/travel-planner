@@ -1,13 +1,17 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import ResultCard from '@/components/ResultCard';
 import BackButton from '@/components/BackButton';
 import { TravelPlan } from '@/types/travel';
+import toast from 'react-hot-toast';
+import { createClient } from '@/utils/supabase/client';
 
-export default function Result() {
+const supabase = createClient();
+
+function ResultContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { isLoading: isAuthLoading } = useAuth();
@@ -28,24 +32,32 @@ export default function Result() {
           preferences: searchParams.get('preferences') || '',
         };
 
+        const { data } = await supabase.auth.getSession();
+        const access_token = data.session?.access_token;
+
         const response = await fetch('/api/planner', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${access_token}`,
           },
           body: JSON.stringify(formData),
+          credentials: 'include',
         });
 
         if (!response.ok) {
+          const errorData = await response.json();
           if (response.status === 401) {
+            toast.error(errorData.error || '認証が必要です');
             router.push('/');
             return;
           }
+          toast.error(errorData.error || '旅行プランの生成に失敗しました');
           throw new Error('旅行プランの生成に失敗しました');
         }
 
-        const data = await response.json();
-        setPlan(data);
+        const dataRes = await response.json();
+        setPlan(dataRes);
       } catch (err) {
         setError(err instanceof Error ? err.message : '予期せぬエラーが発生しました');
       } finally {
@@ -54,7 +66,7 @@ export default function Result() {
     };
 
     fetchPlan();
-  }, [searchParams]);
+  }, [searchParams, router]);
 
   if (isAuthLoading) {
     return (
@@ -99,6 +111,18 @@ export default function Result() {
         {plan && <ResultCard plan={plan} />}
       </div>
     </main>
+  );
+}
+
+export default function Result() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-xl">読み込み中...</div>
+      </div>
+    }>
+      <ResultContent />
+    </Suspense>
   );
 }
 
