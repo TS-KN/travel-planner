@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import { useAuth } from '@/hooks/useAuth';
 import { createClient } from '@/utils/supabase/client';
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 
 const supabase = createClient();
 
@@ -43,7 +44,19 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
         <div className="flex flex-row justify-between items-center h-16 w-full">
           <div className="flex items-center flex-shrink-0">
-            <span className="text-base sm:text-xl font-bold text-indigo-800 whitespace-nowrap">TORAVEL PLANNER</span>
+            {/* ロゴアイコン */}
+            <div className="flex items-center space-x-3">
+              <Image
+                src="/icons/logo.svg"
+                alt="TORAVEL PLANNER"
+                width={40}
+                height={40}
+                className="w-10 h-10 object-contain logo-icon rounded-lg"
+                quality={100}
+                priority
+              />
+              <span className="text-base sm:text-xl font-bold text-indigo-800 whitespace-nowrap">TORAVEL PLANNER</span>
+            </div>
           </div>
           {/* PCサイズ: メールアドレス＋ログアウトボタン */}
           <div className="hidden sm:flex items-center min-w-0 gap-x-2">
