@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { TravelFormData } from '@/types/travel';
-import FormInput from '@/components/FormInput';
-import FormSelect from '@/components/FormSelect';
+import { useState } from "react";
+import { TravelFormData } from "@/types/travel";
+import FormInput from "@/components/FormInput";
+import FormSelect from "@/components/FormSelect";
 
 interface TravelFormProps {
   onSubmit: (data: TravelFormData) => void;
@@ -11,13 +11,13 @@ interface TravelFormProps {
 
 export default function TravelForm({ onSubmit }: TravelFormProps) {
   const [formData, setFormData] = useState<TravelFormData>({
-    destination: '',
-    startDate: '',
-    endDate: '',
+    destination: "",
+    startDate: "",
+    endDate: "",
     numberOfPeople: 1,
-    transportation: 'plane',
+    transportation: "plane",
     budget: 10000,
-    preferences: '',
+    preferences: "",
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -25,16 +25,22 @@ export default function TravelForm({ onSubmit }: TravelFormProps) {
     onSubmit(formData);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: name === 'numberOfPeople' || name === 'budget' ? Number(value) : value
+      [name]:
+        name === "numberOfPeople" || name === "budget" ? Number(value) : value,
     }));
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-lg shadow-md border border-gray-200">
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-6 bg-white p-6 rounded-lg shadow-md border border-gray-200"
+    >
       <FormInput
         label="目的地"
         id="destination"
@@ -87,11 +93,11 @@ export default function TravelForm({ onSubmit }: TravelFormProps) {
         onChange={handleChange}
         required
         options={[
-          { value: 'plane', label: '飛行機' },
-          { value: 'train', label: '電車' },
-          { value: 'car', label: '車' },
-          { value: 'bus', label: 'バス' },
-          { value: 'walk', label: '徒歩' },
+          { value: "plane", label: "飛行機" },
+          { value: "train", label: "電車" },
+          { value: "car", label: "車" },
+          { value: "bus", label: "バス" },
+          { value: "walk", label: "徒歩" },
         ]}
       />
 
@@ -125,4 +131,4 @@ export default function TravelForm({ onSubmit }: TravelFormProps) {
       </button>
     </form>
   );
-} 
+}

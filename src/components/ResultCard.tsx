@@ -1,4 +1,4 @@
-import { TravelPlan } from '@/types/travel';
+import { TravelPlan } from "@/types/travel";
 
 interface ResultCardProps {
   plan: TravelPlan;
@@ -23,7 +23,9 @@ export default function ResultCard({ plan }: ResultCardProps) {
               <div className="space-y-3">
                 {dayPlan.activities.map((activity, index) => (
                   <div key={index} className="flex gap-4">
-                    <span className="text-gray-600 min-w-[60px]">{activity.time}</span>
+                    <span className="text-gray-600 min-w-[60px]">
+                      {activity.time}
+                    </span>
                     <span>{activity.description}</span>
                   </div>
                 ))}
@@ -42,7 +44,9 @@ export default function ResultCard({ plan }: ResultCardProps) {
               <h3 className="font-medium text-gray-800 mb-2">{rec.category}</h3>
               <ul className="list-disc list-inside space-y-1">
                 {rec.items.map((item, itemIndex) => (
-                  <li key={itemIndex} className="text-gray-700">{item}</li>
+                  <li key={itemIndex} className="text-gray-700">
+                    {item}
+                  </li>
                 ))}
               </ul>
             </div>
@@ -57,17 +61,24 @@ export default function ResultCard({ plan }: ResultCardProps) {
           {plan.estimatedCost.map((cost, index) => (
             <div key={index} className="flex justify-between items-center">
               <span className="text-gray-700">{cost.category}</span>
-              <span className="font-medium">¥{cost.amount.toLocaleString()}</span>
+              <span className="font-medium">
+                ¥{cost.amount.toLocaleString()}
+              </span>
             </div>
           ))}
           <div className="border-t pt-3 mt-3">
             <div className="flex justify-between items-center font-semibold">
               <span>合計</span>
-              <span>¥{plan.estimatedCost.reduce((sum, cost) => sum + cost.amount, 0).toLocaleString()}</span>
+              <span>
+                ¥
+                {plan.estimatedCost
+                  .reduce((sum, cost) => sum + cost.amount, 0)
+                  .toLocaleString()}
+              </span>
             </div>
           </div>
         </div>
       </div>
     </div>
   );
-} 
+}

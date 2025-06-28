@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
-import { useAuth } from '@/hooks/useAuth';
-import TravelForm from '@/components/TravelForm';
-import { TravelFormData } from '@/types/travel';
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
+import TravelForm from "@/components/TravelForm";
+import { TravelFormData } from "@/types/travel";
 
 export default function PlannerPage() {
   const router = useRouter();
@@ -34,4 +34,4 @@ export default function PlannerPage() {
       </div>
     </main>
   );
-} 
+}

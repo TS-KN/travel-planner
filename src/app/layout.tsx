@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Toaster } from 'react-hot-toast';
-import { Providers } from './providers';
-import Navbar from '@/components/Navbar';
+import { Toaster } from "react-hot-toast";
+import { Providers } from "./providers";
+import Navbar from "@/components/Navbar";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -12,7 +12,8 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "旅行プランナー | AI旅行計画アシスタント",
-  description: "AIを活用した旅行計画アシスタント。目的地、日程、予算などを入力するだけで、最適な旅行プランを提案します。",
+  description:
+    "AIを活用した旅行計画アシスタント。目的地、日程、予算などを入力するだけで、最適な旅行プランを提案します。",
   keywords: ["旅行", "旅行計画", "AI", "旅行プランナー", "旅行アシスタント"],
 };
 

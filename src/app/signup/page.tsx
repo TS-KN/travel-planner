@@ -1,40 +1,40 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import toast from 'react-hot-toast';
-import FormInput from '@/components/FormInput';
-import { useAuth } from '@/hooks/useAuth';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import toast from "react-hot-toast";
+import FormInput from "@/components/FormInput";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function SignupPage() {
   const router = useRouter();
   const { isLoading: isAuthLoading } = useAuth(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (password !== confirmPassword) {
-      toast.error('パスワードが一致しません');
+      toast.error("パスワードが一致しません");
       return;
     }
 
     if (password.length < 6) {
-      toast.error('パスワードは6文字以上で入力してください');
+      toast.error("パスワードは6文字以上で入力してください");
       return;
     }
 
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/auth/signup', {
-        method: 'POST',
+      const response = await fetch("/api/auth/signup", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           email,
@@ -45,14 +45,16 @@ export default function SignupPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        toast.error(data.error || 'アカウント作成に失敗しました');
+        toast.error(data.error || "アカウント作成に失敗しました");
         return;
       }
 
       toast.success(data.message);
-      router.push('/');
+      router.push("/");
     } catch {
-      toast.error('ネットワークエラーが発生しました。インターネット接続を確認してください。');
+      toast.error(
+        "ネットワークエラーが発生しました。インターネット接続を確認してください。",
+      );
     } finally {
       setIsLoading(false);
     }
@@ -117,7 +119,7 @@ export default function SignupPage() {
               disabled={isLoading}
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
             >
-              {isLoading ? '作成中...' : 'アカウントを作成'}
+              {isLoading ? "作成中..." : "アカウントを作成"}
             </button>
           </div>
 
@@ -133,4 +135,4 @@ export default function SignupPage() {
       </div>
     </main>
   );
-} 
+}

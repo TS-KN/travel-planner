@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState, Suspense } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useAuth } from '@/hooks/useAuth';
-import ResultCard from '@/components/ResultCard';
-import BackButton from '@/components/BackButton';
-import { TravelPlan } from '@/types/travel';
-import toast from 'react-hot-toast';
-import { createClient } from '@/utils/supabase/client';
+import React, { useEffect, useState, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
+import ResultCard from "@/components/ResultCard";
+import BackButton from "@/components/BackButton";
+import { TravelPlan } from "@/types/travel";
+import toast from "react-hot-toast";
+import { createClient } from "@/utils/supabase/client";
 
 const supabase = createClient();
 
@@ -23,43 +23,45 @@ function ResultContent() {
     const fetchPlan = async () => {
       try {
         const formData = {
-          destination: searchParams.get('destination') || '',
-          startDate: searchParams.get('startDate') || '',
-          endDate: searchParams.get('endDate') || '',
-          numberOfPeople: Number(searchParams.get('numberOfPeople')) || 1,
-          transportation: searchParams.get('transportation') || 'train',
-          budget: Number(searchParams.get('budget')) || 0,
-          preferences: searchParams.get('preferences') || '',
+          destination: searchParams.get("destination") || "",
+          startDate: searchParams.get("startDate") || "",
+          endDate: searchParams.get("endDate") || "",
+          numberOfPeople: Number(searchParams.get("numberOfPeople")) || 1,
+          transportation: searchParams.get("transportation") || "train",
+          budget: Number(searchParams.get("budget")) || 0,
+          preferences: searchParams.get("preferences") || "",
         };
 
         const { data } = await supabase.auth.getSession();
         const access_token = data.session?.access_token;
 
-        const response = await fetch('/api/planner', {
-          method: 'POST',
+        const response = await fetch("/api/planner", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${access_token}`,
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${access_token}`,
           },
           body: JSON.stringify(formData),
-          credentials: 'include',
+          credentials: "include",
         });
 
         if (!response.ok) {
           const errorData = await response.json();
           if (response.status === 401) {
-            toast.error(errorData.error || '認証が必要です');
-            router.push('/');
+            toast.error(errorData.error || "認証が必要です");
+            router.push("/");
             return;
           }
-          toast.error(errorData.error || '旅行プランの生成に失敗しました');
-          throw new Error('旅行プランの生成に失敗しました');
+          toast.error(errorData.error || "旅行プランの生成に失敗しました");
+          throw new Error("旅行プランの生成に失敗しました");
         }
 
         const dataRes = await response.json();
         setPlan(dataRes);
       } catch (err) {
-        setError(err instanceof Error ? err.message : '予期せぬエラーが発生しました');
+        setError(
+          err instanceof Error ? err.message : "予期せぬエラーが発生しました",
+        );
       } finally {
         setLoading(false);
       }
@@ -118,13 +120,14 @@ function ResultContent() {
 
 export default function Result() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl">読み込み中...</div>
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-xl">読み込み中...</div>
+        </div>
+      }
+    >
       <ResultContent />
     </Suspense>
   );
 }
-
