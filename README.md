@@ -31,17 +31,20 @@ OPENAI_API_KEY=your_openai_api_key
 ## 始め方
 
 1. リポジトリをクローン
+
 ```bash
 git clone https://github.com/yourusername/travel-planner.git
 cd travel-planner
 ```
 
 2. 依存関係のインストール
+
 ```bash
 npm install
 ```
 
 3. 開発サーバーの起動
+
 ```bash
 npm run dev
 ```
@@ -49,6 +52,7 @@ npm run dev
 4. ブラウザで http://localhost:3000 にアクセス
 
 ## 使い方
+
 0. ログインする
 
 1. 以下の情報を入力：

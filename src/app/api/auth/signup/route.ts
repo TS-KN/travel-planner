@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/utils/supabase/server';
+import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "@/utils/supabase/server";
 
 export async function POST(request: NextRequest) {
   const supabase = await createClient();
@@ -8,29 +8,35 @@ export async function POST(request: NextRequest) {
 
     if (!email || !password) {
       return NextResponse.json(
-        { error: 'メールアドレスとパスワードは必須です' },
-        { status: 400 }
+        { error: "メールアドレスとパスワードは必須です" },
+        { status: 400 },
       );
     }
 
     // 既存のメールアドレスかどうかをチェック
-    const { data: checkData, error: checkError } = await supabase.rpc('check_email', {
-      email_address: email
-    });
+    const { data: checkData, error: checkError } = await supabase.rpc(
+      "check_email",
+      {
+        email_address: email,
+      },
+    );
 
     if (checkError) {
-      console.error('Check email error:', checkError);
+      console.error("Check email error:", checkError);
       return NextResponse.json(
-        { error: 'メールアドレスの確認中にエラーが発生しました' },
-        { status: 500 }
+        { error: "メールアドレスの確認中にエラーが発生しました" },
+        { status: 500 },
       );
     }
 
     // 既存のメールアドレスの場合
     if (checkData > 0) {
       return NextResponse.json(
-        { error: 'このメールアドレスは既に登録されています。ログインページからログインしてください。' },
-        { status: 400 }
+        {
+          error:
+            "このメールアドレスは既に登録されています。ログインページからログインしてください。",
+        },
+        { status: 400 },
       );
     }
 
@@ -47,19 +53,22 @@ export async function POST(request: NextRequest) {
     if (result.error) {
       return NextResponse.json(
         { error: result.error.message },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     return NextResponse.json(
-      { message: 'アカウントが作成されました。メールボックスを確認して、確認メールのリンクをクリックしてください。メール確認が完了するまでログインできません。' },
-      { status: 201 }
+      {
+        message:
+          "アカウントが作成されました。メールボックスを確認して、確認メールのリンクをクリックしてください。メール確認が完了するまでログインできません。",
+      },
+      { status: 201 },
     );
   } catch (error) {
-    console.error('Signup error:', error);
+    console.error("Signup error:", error);
     return NextResponse.json(
-      { error: 'サーバーエラーが発生しました' },
-      { status: 500 }
+      { error: "サーバーエラーが発生しました" },
+      { status: 500 },
     );
   }
-} 
+}

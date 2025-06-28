@@ -5,7 +5,10 @@ interface FormInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 export default function FormInput({ label, id, ...props }: FormInputProps) {
   return (
     <div>
-      <label htmlFor={id} className="block text-sm font-medium text-gray-700 mb-1">
+      <label
+        htmlFor={id}
+        className="block text-sm font-medium text-gray-700 mb-1"
+      >
         {label}
       </label>
       <input
@@ -15,4 +18,4 @@ export default function FormInput({ label, id, ...props }: FormInputProps) {
       />
     </div>
   );
-} 
+}

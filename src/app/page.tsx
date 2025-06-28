@@ -1,33 +1,36 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import toast from 'react-hot-toast';
-import FormInput from '@/components/FormInput';
-import { useAuth } from '@/hooks/useAuth';
-import { createClient } from '@/utils/supabase/client';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import toast from "react-hot-toast";
+import FormInput from "@/components/FormInput";
+import { useAuth } from "@/hooks/useAuth";
+import { createClient } from "@/utils/supabase/client";
 
 const supabase = createClient();
 
 export default function LoginPage() {
   const router = useRouter();
   const { isLoading: isAuthLoading } = useAuth(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
     if (error) {
-      toast.error('ログインに失敗しました');
+      toast.error("ログインに失敗しました");
       setIsLoading(false);
       return;
     }
-    toast.success('ログインしました');
-    router.push('/planner');
+    toast.success("ログインしました");
+    router.push("/planner");
     setIsLoading(false);
   };
 
@@ -77,7 +80,7 @@ export default function LoginPage() {
               disabled={isLoading}
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
             >
-              {isLoading ? 'ログイン中...' : 'ログイン'}
+              {isLoading ? "ログイン中..." : "ログイン"}
             </button>
           </div>
 

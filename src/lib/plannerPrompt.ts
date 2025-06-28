@@ -27,7 +27,7 @@ export function createPlannerPrompt(params: {
 人数: ${numberOfPeople}人
 交通手段: ${transportation}
 予算: ${budget}円
-希望・好み: ${preferences || '指定なし'}
+希望・好み: ${preferences || "指定なし"}
 
 以下の形式でJSONとして回答してください：
 {
@@ -63,4 +63,4 @@ export function createPlannerPrompt(params: {
 3. 時間は24時間表記で入力してください
 4. 日本語で回答してください
 `;
-} 
+}

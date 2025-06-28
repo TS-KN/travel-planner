@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { createClient } from '@/utils/supabase/client';
-import type { User } from '@supabase/supabase-js';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/utils/supabase/client";
+import type { User } from "@supabase/supabase-js";
 
 const supabase = createClient();
 
@@ -17,8 +17,8 @@ export function useAuth(requireAuth: boolean = true) {
       const { data } = await supabase.auth.getUser();
       setUser(data.user);
       setIsLoading(false);
-      if (requireAuth && !data.user) router.push('/');
-      if (!requireAuth && data.user) router.push('/planner');
+      if (requireAuth && !data.user) router.push("/");
+      if (!requireAuth && data.user) router.push("/planner");
     };
     getUser();
 
@@ -35,4 +35,4 @@ export function useAuth(requireAuth: boolean = true) {
     isLoading,
     isAuthenticated: !!user,
   };
-} 
+}

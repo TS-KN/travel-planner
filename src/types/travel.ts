@@ -25,4 +25,4 @@ export interface TravelPlan {
     category: string;
     amount: number;
   }[];
-} 
+}
